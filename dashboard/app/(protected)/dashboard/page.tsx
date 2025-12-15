@@ -7,10 +7,10 @@ import { useWeb3 } from "@/hooks/useWeb3"
 import { formatEther, parseEther, keccak256, toHex } from 'viem'
 import { getRiskScore, AIRiskResponse } from '@/lib/aiClient'
 import dynamic from 'next/dynamic'
-import { LazyGlobe } from "@/components/globe/LazyGlobe"
+import Globe from "@/components/globe/Globe"
 const OnboardingModal = dynamic(() => import("@/components/onboarding/OnboardingModal").then((mod) => mod.OnboardingModal), { ssr: false })
 import { GlobePoint } from "@/lib/types"
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+// import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 // --- Utility: Deterministic Geo-Hash from Address ---
 function getGeoFromAddress(address: string) {
@@ -344,7 +344,7 @@ export default function DashboardPage() {
                                 <Icon icon="lucide:globe" className="text-zinc-500" />
                                 Real-Time Compliance Flow
                             </h3>
-                            {isMounted && <LazyGlobe points={globePoints} />}
+                            {isMounted && <Globe points={globePoints} />}
                             {globePoints.length === 0 && (
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
                                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 border border-white/10 backdrop-blur-md">
@@ -357,24 +357,25 @@ export default function DashboardPage() {
 
                         <div className="glass-panel p-6 rounded-xl flex flex-col h-[500px]">
                             <h3 className="text-sm font-medium text-white mb-6">Yield Projection</h3>
-                            <div className="flex-1 w-full relative">
-                                {isMounted && (
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <AreaChart data={chartData}>
-                                            <defs>
-                                                <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                                                    <stop offset="5%" stopColor="#f97316" stopOpacity={0.3} />
-                                                    <stop offset="95%" stopColor="#f97316" stopOpacity={0} />
-                                                </linearGradient>
-                                            </defs>
-                                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                                            <XAxis dataKey="time" stroke="#6b7280" tickLine={false} axisLine={false} />
-                                            <YAxis stroke="#6b7280" tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}M`} />
-                                            <Tooltip />
-                                            <Area type="monotone" dataKey="value" strokeWidth={2} stroke="#f97316" fill="url(#colorValue)" />
-                                        </AreaChart>
-                                    </ResponsiveContainer>
-                                )}
+                            <div className="flex-1 w-full relative flex items-center justify-center text-zinc-500">
+                                {/* {isMounted && (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart data={chartData}>
+                                        <defs>
+                                            <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#f97316" stopOpacity={0.3} />
+                                                <stop offset="95%" stopColor="#f97316" stopOpacity={0} />
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                                        <XAxis dataKey="time" stroke="#6b7280" tickLine={false} axisLine={false} />
+                                        <YAxis stroke="#6b7280" tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}M`} />
+                                        <Tooltip />
+                                        <Area type="monotone" dataKey="value" strokeWidth={2} stroke="#f97316" fill="url(#colorValue)" />
+                                    </AreaChart>
+                                </ResponsiveContainer>
+                                )} */}
+                                <div className="text-sm">Chart Visualization Placeholder</div>
                             </div>
                             <div className="mt-4 pt-4 border-t border-white/5">
                                 <div className="flex justify-between items-center text-xs">
