@@ -6,13 +6,13 @@ import { Icon } from '@iconify/react'
 import { useWeb3 } from "@/hooks/useWeb3"
 import { formatEther, parseEther, keccak256, toHex } from 'viem'
 import { getRiskScore, AIRiskResponse } from '@/lib/aiClient'
-import dynamic from 'next/dynamic'
+import nextDynamic from 'next/dynamic'
 import Globe from "@/components/globe/Globe"
-const OnboardingModal = dynamic(() => import("@/components/onboarding/OnboardingModal").then((mod) => mod.OnboardingModal), { ssr: false })
+const OnboardingModal = nextDynamic(() => import("@/components/onboarding/OnboardingModal").then((mod) => mod.OnboardingModal), { ssr: false })
 import { GlobePoint } from "@/lib/types"
 
 // Dynamic import for Recharts to ensure it never touches the server
-const Plot = dynamic(() => import('@/components/dashboard/Plot'), { ssr: false })
+const Plot = nextDynamic(() => import('@/components/dashboard/Plot'), { ssr: false })
 
 // --- Utility: Deterministic Geo-Hash from Address ---
 function getGeoFromAddress(address: string) {
