@@ -1,0 +1,10 @@
+export const CONFIG = {
+    RPC_URL: process.env.NEXT_PUBLIC_SUBNET_RPC_URL || "http://127.0.0.1:9654/ext/bc/BJETF9zXR37AV4EaJobEPxi3wiS9Pxy39bZ1RjhCBbvE1eCdP/rpc",
+    AI_SERVICE_URL: process.env.NEXT_PUBLIC_AI_SERVICE_URL || "http://localhost:4000",
+    CHAIN_ID: 22222,
+    CONTRACTS: {
+        REGISTRY: "0x52C84043CD9c865236f11d9Fc9F56aa003c1f922",
+        STABLECOIN: "0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25",
+        RWA: "0x5aa01B3b5877255cE50cc55e8986a7a5fe29C70e",
+    }
+};

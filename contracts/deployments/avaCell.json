@@ -1,0 +1,9 @@
+{
+  "network": "avaCell",
+  "chainId": 22222,
+  "contracts": {
+    "AvaComplianceRegistry": "0xc78a185dDC2d862B52A381295Ce24E5E2C98e3c8",
+    "AvaStablecoin": "0xE01D2cf5e82d588f4660DB248ccFfaFCAe92309F",
+    "AvaRWAAsset": "0xE5829Fe92Cf254FF61b6FD19aD6ccE3fca4a2c57"
+  }
+}
