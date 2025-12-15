@@ -12,6 +12,7 @@ const nextConfig = {
         // your project has ESLint errors.
         ignoreDuringBuilds: true,
     },
+    transpilePackages: ['three', '@react-three/drei', '@react-three/fiber'],
 }
 
 module.exports = nextConfig
