@@ -1,13 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    // Use standalone output to avoid SSR issues
+    output: 'standalone',
+    // Disable static page generation
     experimental: {
-        // Disable static optimization to fix SSR errors
-        workerThreads: false,
-        cpus: 1
-    },
-    // Disable static page generation for error pages
-    generateBuildId: async () => {
-        return 'build-' + Date.now()
+        runtime: 'nodejs',
     },
     // Add explicit runtime configuration
     reactStrictMode: true,
