@@ -3,7 +3,7 @@
 export const dynamic = "force-dynamic"
 
 import { useEffect, useState } from 'react'
-import { Globe } from "@/components/globe/Globe"
+import { LazyGlobe } from "@/components/globe/LazyGlobe"
 import { supabase } from "@/lib/supabaseClient"
 import { GlobePoint } from "@/lib/types"
 
@@ -63,7 +63,7 @@ export default function GlobePage() {
                 </div>
             </div>
             <div className="flex-1 bg-card rounded-xl border border-border overflow-hidden shadow-2xl relative">
-                {isMounted && <Globe points={points} />}
+                {isMounted && <LazyGlobe points={points} />}
                 {loading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm z-10">
                         <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />

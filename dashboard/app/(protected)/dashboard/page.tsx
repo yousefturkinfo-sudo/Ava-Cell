@@ -7,7 +7,7 @@ import { useWeb3 } from "@/hooks/useWeb3"
 import { formatEther, parseEther, keccak256, toHex } from 'viem'
 import { getRiskScore, AIRiskResponse } from '@/lib/aiClient'
 import dynamic from 'next/dynamic'
-const Globe = dynamic(() => import("@/components/globe/Globe").then((mod) => mod.Globe), { ssr: false })
+import { LazyGlobe } from "@/components/globe/LazyGlobe"
 const OnboardingModal = dynamic(() => import("@/components/onboarding/OnboardingModal").then((mod) => mod.OnboardingModal), { ssr: false })
 import { GlobePoint } from "@/lib/types"
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
@@ -344,7 +344,7 @@ export default function DashboardPage() {
                                 <Icon icon="lucide:globe" className="text-zinc-500" />
                                 Real-Time Compliance Flow
                             </h3>
-                            {isMounted && <Globe points={globePoints} />}
+                            {isMounted && <LazyGlobe points={globePoints} />}
                             {globePoints.length === 0 && (
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
                                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 border border-white/10 backdrop-blur-md">
