@@ -7,9 +7,9 @@ import { formatEther, parseEther, keccak256, toHex } from 'viem'
 import { getRiskScore, AIRiskResponse } from '@/lib/aiClient'
 import dynamic from 'next/dynamic'
 const Globe = dynamic(() => import("@/components/globe/Globe").then((mod) => mod.Globe), { ssr: false })
+const OnboardingModal = dynamic(() => import("@/components/onboarding/OnboardingModal").then((mod) => mod.OnboardingModal), { ssr: false })
 import { GlobePoint } from "@/lib/types"
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { OnboardingModal } from "@/components/onboarding/OnboardingModal"
 
 // --- Utility: Deterministic Geo-Hash from Address ---
 function getGeoFromAddress(address: string) {
