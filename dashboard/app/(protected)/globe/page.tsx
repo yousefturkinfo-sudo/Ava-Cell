@@ -10,8 +10,10 @@ import { GlobePoint } from "@/lib/types"
 export default function GlobePage() {
     const [points, setPoints] = useState<GlobePoint[]>([])
     const [loading, setLoading] = useState(true)
+    const [isMounted, setIsMounted] = useState(false)
 
     useEffect(() => {
+        setIsMounted(true)
         async function fetchData() {
             // Fetch countries and their stats
             const { data: countries } = await supabase.from('countries').select('*')
@@ -61,7 +63,7 @@ export default function GlobePage() {
                 </div>
             </div>
             <div className="flex-1 bg-card rounded-xl border border-border overflow-hidden shadow-2xl relative">
-                <Globe points={points} />
+                {isMounted && <Globe points={points} />}
                 {loading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm z-10">
                         <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
