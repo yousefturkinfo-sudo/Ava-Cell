@@ -4,23 +4,6 @@ import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { GlobePoint } from "@/lib/types"
 
-// Simplified World Map SVG Paths (Mercator-ish)
-const WORLD_PATHS = [
-    // North America
-    "M 15 15 L 40 15 L 45 35 L 30 50 L 10 40 Z",
-    // South America
-    "M 35 55 L 50 55 L 45 90 L 35 80 Z",
-    // Europe/Asia
-    "M 55 15 L 95 15 L 90 60 L 60 55 L 50 40 Z",
-    // Africa
-    "M 55 60 L 75 60 L 70 90 L 50 80 Z",
-    // Australia
-    "M 80 75 L 95 75 L 90 90 L 80 85 Z"
-]
-
-// Actual SVG Map (Simplified geometry for visual reference)
-const GEO_PATH = "M150,0 L1000,0 L1000,500 L0,500 L0,0 Z" // Placeholder if no paths
-
 export const Globe = ({ points }: { points: GlobePoint[] }) => {
 
     // Convert Lat/Lng to % positions (Equirectangular approximation)
@@ -33,7 +16,7 @@ export const Globe = ({ points }: { points: GlobePoint[] }) => {
     }, [points])
 
     return (
-        <div className="w-full h-full bg-[#050505] relative overflow-hidden flex items-center justify-center">
+        <div className="w-full h-full bg-[#050505] relative overflow-hidden flex items-center justify-center rounded-xl border border-white/10">
             {/* Grid Background */}
             <div className="absolute inset-0"
                 style={{
@@ -42,105 +25,54 @@ export const Globe = ({ points }: { points: GlobePoint[] }) => {
                 }}
             />
 
-            return (
-            <div className="w-full h-full min-h-[500px] rounded-xl overflow-hidden relative flex flex-col md:flex-row">
-                <div className="flex-1 relative h-[500px] md:h-auto">
-                    <Canvas camera={{ position: [0, 0, 2.5], fov: 45 }}>
-                        <ambientLight intensity={0.5} />
-                        <pointLight position={[10, 10, 10]} intensity={1.5} />
-                        <Earth />
-                        <DataPoints points={points} onSelect={handleSelect} />
-                        <OrbitControls enableZoom={true} minDistance={1.5} maxDistance={4} autoRotate autoRotateSpeed={0.5} />
-                    </Canvas>
-                </div>
-
-                {/* AI Analysis Sidebar Overlay or Panel */}
-                {selectedPoint && (
-                    <div className="absolute right-4 top-4 bottom-4 w-72 bg-background/95 backdrop-blur-md border border-border rounded-xl p-4 shadow-2xl flex flex-col animate-in slide-in-from-right-10">
-                        <div className="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 className="font-bold text-lg">{selectedPoint.country_id}</h3>
-                                <p className="text-xs text-muted-foreground">Compliance Report</p>
-                            </div>
-                            <button onClick={() => setSelectedPoint(null)} className="text-muted-foreground hover:text-foreground">✕</button>
-                        </div>
-
-                        <div className="space-y-4 flex-1 overflow-y-auto">
-                            <div className="p-3 bg-muted/30 rounded-lg">
-                                <div className="text-xs text-muted-foreground mb-1">Total Asset Value</div>
-                                <div className="text-xl font-mono">${(selectedPoint.value * 1000000).toLocaleString()}</div>
-                            </div>
-
-                            <div className="border-t border-border pt-4">
-                                <div className="flex items-center gap-2 mb-3">
-                                    <div className="p-1.5 bg-primary/10 rounded-md">
-                                        <Loader2 className={`w-4 h-4 text-primary ${loading ? 'animate-spin' : ''}`} />
-                                    </div>
-                                    <span className="font-semibold text-sm">AI Risk Analysis</span>
-                                </div>
-
-                                {loading ? (
-                                    <div className="space-y-2 opacity-50">
-                                        <div className="h-4 bg-muted rounded w-3/4" />
-                                        <div className="h-4 bg-muted rounded w-1/2" />
-                                    </div>
-                                ) : aiAnalysis ? (
-                                    <div className="space-y-3">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm">Risk Score</span>
-                                            <span className={cn("text-lg font-bold",
-                                                aiAnalysis.riskScore > 70 ? "text-red-500" :
-                                                    aiAnalysis.riskScore > 30 ? "text-amber-500" : "text-emerald-500"
-                                            )}>
-                                                {aiAnalysis.riskScore}/100
-                                            </span>
-                                        </div>
-
-                                        <div className="p-2 rounded bg-muted/50 text-xs border border-border">
-                                            <div className="flex items-center gap-2 mb-1">
-                                                {aiAnalysis.label === 'LOW' && <CheckCircle className="w-3 h-3 text-emerald-500" />}
-                                                {aiAnalysis.label === 'MEDIUM' && <AlertTriangle className="w-3 h-3 text-amber-500" />}
-                                                {aiAnalysis.label === 'HIGH' && <ShieldAlert className="w-3 h-3 text-red-500" />}
-                                                <span className="font-medium">Verdict: {aiAnalysis.label} RISK</span>
-                                            </div>
-                                            <p className="opacity-80">
-                                                AI-generated assessment based on transaction patterns and regulatory compliance history.
-                                            </p>
-                                        </div>
-
-                                        {aiAnalysis.isMock && (
-                                            <div className="text-[10px] text-muted-foreground text-center">
-                                                (Simulated Response)
-                                            </div>
-                                        )}
-                                    </div>
-                                ) : null}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Legend */}
-                {!selectedPoint && (
-                    <div className="absolute bottom-4 left-4 bg-background/80 backdrop-blur-md p-3 rounded-lg border border-border text-xs pointer-events-none">
-                        <div className="flex items-center gap-2 mb-1">
-                            <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                            <span>Low Risk</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-amber-500" />
-                            <span>Medium Risk</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-red-500" />
-                            <span>High Risk</span>
-                        </div>
-                    </div>
-                )}
+            {/* World Map Overlay (Abstract SVG) */}
+            <div className="absolute inset-x-10 inset-y-10 opacity-30 select-none pointer-events-none">
+                <svg viewBox="0 0 100 50" className="w-full h-full fill-white/10 stroke-white/20 stroke-[0.1]">
+                    {/* Simplified Continents */}
+                    <path d="M15,5 Q35,0 45,15 T15,35 Z" /> {/* North America */}
+                    <path d="M20,40 Q30,40 35,60 T25,50 Z" /> {/* South America */}
+                    <path d="M50,5 Q80,0 90,15 T60,45 Z" /> {/* Eurasia */}
+                    <path d="M50,50 Q60,50 65,70 T55,60 Z" /> {/* Africa */}
+                    <path d="M80,35 Q90,35 85,45 Z" />      {/* Australia */}
+                </svg>
             </div>
-            )
-})
 
-            function cn(...classes: (string | undefined | null | false)[]) {
-    return classes.filter(Boolean).join(' ')
+            {/* Data Points */}
+            <div className="absolute inset-x-10 inset-y-10">
+                {renderPoints.map((point, i) => (
+                    <motion.div
+                        key={i}
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 0.5, delay: i * 0.05 }}
+                        className="absolute w-3 h-3 -ml-1.5 -mt-1.5"
+                        style={{ left: `${point.x}%`, top: `${point.y}%` }}
+                    >
+                        <div className={`w-full h-full rounded-full animate-ping absolute inset-0 ${point.risk > 0.5 ? 'bg-orange-500' : 'bg-emerald-500'} opacity-75`} />
+                        <div className={`relative w-full h-full rounded-full ${point.risk > 0.5 ? 'bg-orange-500' : 'bg-emerald-500'} shadow-[0_0_10px_rgba(255,255,255,0.5)]`} />
+
+                        {/* Tooltip */}
+                        <div className="group relative w-full h-full cursor-help">
+                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-2 py-1 bg-black/90 border border-white/20 rounded text-[10px] text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                {point.countryName} (Risk: {(point.risk * 100).toFixed(0)}%)
+                            </div>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
+
+            {/* Scanline Effect */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-orange-500/5 to-transparent h-[20%] w-full animate-scan pointer-events-none" />
+
+            {/* Status Overlay */}
+            <div className="absolute bottom-4 left-4 flex items-center gap-2 pointer-events-none">
+                <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-black/50 border border-white/10 backdrop-blur-sm">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span className="text-[10px] text-zinc-400 font-mono">LIVE_FEED_ACTIVE</span>
+                </div>
+            </div>
+        </div>
+    )
 }
+
+export default Globe;
